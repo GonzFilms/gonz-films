@@ -219,11 +219,47 @@
                 setPasteText('');
             };
             
+            const handlePaste = (e) => {
+                // Force la mise à jour du state sur iOS
+                setTimeout(() => {
+                    setPasteText(e.target.value);
+                }, 10);
+            };
+            
             const handleClear = async () => {
                 if (confirm('Supprimer tous les films ?')) {
                     await saveFilms([]);
                     setFilms([]);
                 }
+            };
+            
+            const handleExportJSON = () => {
+                const dataStr = JSON.stringify(films, null, 2);
+                const dataBlob = new Blob([dataStr], { type: 'application/json' });
+                const url = URL.createObjectURL(dataBlob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'gonz_films_export.json';
+                link.click();
+                URL.revokeObjectURL(url);
+            };
+            
+            const handleImportJSON = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = async (event) => {
+                    try {
+                        const imported = JSON.parse(event.target.result);
+                        await saveFilms(imported);
+                        setFilms(imported);
+                        alert(`✅ ${imported.length} films importés !`);
+                    } catch (error) {
+                        alert('❌ Erreur : fichier JSON invalide');
+                    }
+                };
+                reader.readAsText(file);
             };
             
             const handleSort = (field) => {
@@ -290,7 +326,7 @@
                             🎬 Gonz Films
                         </h1>
                         <div style={{background: '#1e293b', padding: '20px', borderRadius: '8px', marginBottom: '20px'}}>
-                            <h2 style={{fontSize: '18px', marginBottom: '10px'}}>📋 Instructions</h2>
+                            <h2 style={{fontSize: '18px', marginBottom: '10px'}}>📋 Méthode 1 : Import Excel (Mac uniquement)</h2>
                             <ol style={{paddingLeft: '20px', lineHeight: '1.8', color: '#9ca3af'}}>
                                 <li>Ouvrez votre fichier Excel <strong>GONZ FILMS</strong></li>
                                 <li>Sélectionnez les colonnes <strong>H à U</strong> (14 colonnes)</li>
@@ -299,9 +335,30 @@
                                 <li>Collez ci-dessous (Cmd+V)</li>
                             </ol>
                         </div>
+                        <div style={{background: '#1e3a1e', padding: '20px', borderRadius: '8px', marginBottom: '20px', border: '2px solid #10b981'}}>
+                            <h2 style={{fontSize: '18px', marginBottom: '10px', color: '#10b981'}}>✨ Méthode 2 : Export/Import JSON (Recommandé iPhone)</h2>
+                            <div style={{lineHeight: '1.8', color: '#9ca3af'}}>
+                                <p style={{marginBottom: '10px'}}><strong>Sur Mac/PC :</strong></p>
+                                <ol style={{paddingLeft: '20px', marginBottom: '15px'}}>
+                                    <li>Importez vos films via la méthode Excel</li>
+                                    <li>Cliquez sur <strong>"💾 Export JSON"</strong></li>
+                                    <li>Téléchargez le fichier <code>gonz_films_export.json</code></li>
+                                    <li>Mettez-le dans iCloud Drive</li>
+                                </ol>
+                                <p style={{marginBottom: '10px'}}><strong>Sur iPhone :</strong></p>
+                                <ol style={{paddingLeft: '20px'}}>
+                                    <li>Ouvrez cette page</li>
+                                    <li>Cliquez sur <strong>"📥 Import JSON"</strong></li>
+                                    <li>Sélectionnez le fichier depuis iCloud Drive</li>
+                                    <li>✅ Tous vos films sont importés instantanément !</li>
+                                </ol>
+                            </div>
+                        </div>
                         <textarea
                             value={pasteText}
                             onChange={(e) => setPasteText(e.target.value)}
+                            onPaste={handlePaste}
+                            onInput={(e) => setPasteText(e.target.value)}
                             placeholder="Collez vos données ici..."
                             style={{
                                 width: '100%',
@@ -348,7 +405,38 @@
                                 {filteredFilms.length} films {filteredFilms.length !== films.length && `sur ${films.length}`}
                             </div>
                         </div>
-                        <div style={{display: 'flex', gap: '10px'}}>
+                        <div style={{display: 'flex', gap: '10px', flexWrap: 'wrap'}}>
+                            <button
+                                onClick={handleExportJSON}
+                                style={{
+                                    padding: '8px 16px',
+                                    background: '#10b981',
+                                    color: 'white',
+                                    borderRadius: '6px',
+                                    fontSize: '14px',
+                                    fontWeight: '600'
+                                }}
+                            >
+                                💾 Export JSON
+                            </button>
+                            <label style={{
+                                padding: '8px 16px',
+                                background: '#3b82f6',
+                                color: 'white',
+                                borderRadius: '6px',
+                                fontSize: '14px',
+                                fontWeight: '600',
+                                cursor: 'pointer',
+                                display: 'inline-block'
+                            }}>
+                                📥 Import JSON
+                                <input
+                                    type="file"
+                                    accept=".json"
+                                    onChange={handleImportJSON}
+                                    style={{display: 'none'}}
+                                />
+                            </label>
                             <button
                                 onClick={handleClear}
                                 style={{
