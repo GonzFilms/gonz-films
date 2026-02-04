@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -325,6 +326,37 @@
                         <h1 style={{fontSize: '32px', marginBottom: '20px', textAlign: 'center'}}>
                             🎬 Gonz Films
                         </h1>
+                        
+                        {/* Bouton Import JSON en premier */}
+                        <div style={{marginBottom: '30px', textAlign: 'center'}}>
+                            <label style={{
+                                display: 'inline-block',
+                                padding: '16px 32px',
+                                background: '#10b981',
+                                color: 'white',
+                                borderRadius: '8px',
+                                fontSize: '18px',
+                                fontWeight: '600',
+                                cursor: 'pointer',
+                                boxShadow: '0 4px 6px rgba(0,0,0,0.3)'
+                            }}>
+                                📥 Import JSON
+                                <input
+                                    type="file"
+                                    accept=".json"
+                                    onChange={handleImportJSON}
+                                    style={{display: 'none'}}
+                                />
+                            </label>
+                            <div style={{marginTop: '10px', fontSize: '14px', color: '#6b7280'}}>
+                                Si vous avez déjà exporté vos films
+                            </div>
+                        </div>
+                        
+                        <div style={{textAlign: 'center', margin: '30px 0', color: '#6b7280', fontSize: '16px', fontWeight: '600'}}>
+                            — OU —
+                        </div>
+                        
                         <div style={{background: '#1e293b', padding: '20px', borderRadius: '8px', marginBottom: '20px'}}>
                             <h2 style={{fontSize: '18px', marginBottom: '10px'}}>📋 Méthode 1 : Import Excel (Mac uniquement)</h2>
                             <ol style={{paddingLeft: '20px', lineHeight: '1.8', color: '#9ca3af'}}>
@@ -336,22 +368,10 @@
                             </ol>
                         </div>
                         <div style={{background: '#1e3a1e', padding: '20px', borderRadius: '8px', marginBottom: '20px', border: '2px solid #10b981'}}>
-                            <h2 style={{fontSize: '18px', marginBottom: '10px', color: '#10b981'}}>✨ Méthode 2 : Export/Import JSON (Recommandé iPhone)</h2>
+                            <h2 style={{fontSize: '18px', marginBottom: '10px', color: '#10b981'}}>💡 À propos de l'Import JSON</h2>
                             <div style={{lineHeight: '1.8', color: '#9ca3af'}}>
-                                <p style={{marginBottom: '10px'}}><strong>Sur Mac/PC :</strong></p>
-                                <ol style={{paddingLeft: '20px', marginBottom: '15px'}}>
-                                    <li>Importez vos films via la méthode Excel</li>
-                                    <li>Cliquez sur <strong>"💾 Export JSON"</strong></li>
-                                    <li>Téléchargez le fichier <code>gonz_films_export.json</code></li>
-                                    <li>Mettez-le dans iCloud Drive</li>
-                                </ol>
-                                <p style={{marginBottom: '10px'}}><strong>Sur iPhone :</strong></p>
-                                <ol style={{paddingLeft: '20px'}}>
-                                    <li>Ouvrez cette page</li>
-                                    <li>Cliquez sur <strong>"📥 Import JSON"</strong></li>
-                                    <li>Sélectionnez le fichier depuis iCloud Drive</li>
-                                    <li>✅ Tous vos films sont importés instantanément !</li>
-                                </ol>
+                                <p style={{marginBottom: '10px'}}>Le fichier JSON est créé sur Mac/PC après avoir importé vos films via Excel.</p>
+                                <p>Une fois que vous avez le fichier <code>gonz_films_export.json</code> dans iCloud Drive, utilisez le bouton <strong>"📥 Import JSON"</strong> ci-dessus pour importer instantanément tous vos films !</p>
                             </div>
                         </div>
                         <textarea
